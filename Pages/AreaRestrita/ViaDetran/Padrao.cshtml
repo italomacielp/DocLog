@@ -1,0 +1,151 @@
+﻿@page 
+@model Pages_AreaRestrita_ViaDetran_Padrao
+@{
+    ViewData["Title"] = "Padrões - ViaDetran";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Padrões de Desenvolvimento</h2>
+
+    <div class="accordion accordion-flush" id="accordionPadroes">
+
+        <!-- ===================== C# ===================== -->
+        <div class="accordion-item bg-dark text-light border-secondary">
+            <h2 class="accordion-header">
+                <button class="accordion-button bg-dark text-light collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#collapseCSharp">
+                    C#
+                </button>
+            </h2>
+            <div id="collapseCSharp" class="accordion-collapse collapse" data-bs-parent="#accordionPadroes">
+                <div class="accordion-body">
+
+                    <h5>Formulário</h5>
+
+                    <h6 class="mt-3">Nome de Variáveis</h6>
+                    <ul>
+                        <li>
+                            Se for uma <strong>lista</strong> de um determinado objeto, o nome deve seguir a estrutura:
+                            <code>ListaNomeObjeto</code><br />
+                            <span class="text-muted">Exemplo:</span> <code>ListaTipoRestricao</code>
+                        </li>
+                        <li>
+                            Se for um <strong>objeto</strong> que será utilizado, deverá ter a seguinte estrutura:
+                            <code>NomeObjetoObj</code><br />
+                            <span class="text-muted">Exemplo:</span> <code>TipoRestricaoObj</code>
+                        </li>
+                    </ul>
+
+                    <h6 class="mt-3">Rota de Exclusão</h6>
+                    <p>
+                        A exclusão deve ser feita sempre na página <code>update.cshtml</code> da tabela,
+                        utilizando o Handler. Exemplo:
+                    </p>
+                    <pre class="bg-black p-3 rounded"><code>private async Task&lt;IActionResult&gt; OnPostExcluirAsync()</code></pre>
+
+                    <h6 class="mt-3">Construtor do Model da Página</h6>
+                    <p class="text-muted fst-italic">A ser detalhado.</p>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== SQL Server ===================== -->
+        <div class="accordion-item bg-dark text-light border-secondary">
+            <h2 class="accordion-header">
+                <button class="accordion-button bg-dark text-light collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#collapseSql">
+                    SQL Server
+                </button>
+            </h2>
+            <div id="collapseSql" class="accordion-collapse collapse" data-bs-parent="#accordionPadroes">
+                <div class="accordion-body">
+
+                    <h5>Procedures</h5>
+
+                    <p>
+                        Nome da procedure deve seguir o padrão <code>[schema].[Tabela_Acao]</code>.<br />
+                        <span class="text-muted">Exemplo:</span> <code>[Veiculo].[Categoria_Sel]</code>
+                    </p>
+
+                    <p>
+                        No topo da declaração de uma procedure, registrar os seguintes dados, seguindo a ordem:
+                        <strong>descrição, autor, data de criação, histórico</strong> (preenchido só quando necessário,
+                        quando houver alterações).
+                    </p>
+
+                    <pre class="bg-black p-3 rounded"><code>-- =================================================
+-- Descrição: Seleciona Tipo Restrição
+-- Autor: Nome do Autor
+-- Criado em: 05/08/2026
+-- Histórico:
+-- =================================================
+CREATE PROCEDURE Veiculo.TipoRestricao_Sel</code></pre>
+
+                    <ul>
+                        <li>Usar <code>TRANSACTION</code> nos comandos <code>INSERT</code>, <code>UPDATE</code> e <code>DELETE</code>.</li>
+                        <li>Adicionar <code>SET NOCOUNT ON</code> e <code>SET XACT_ABORT ON</code>.</li>
+                        <li>Evitar usar <em>functions</em> nas procedures.</li>
+                    </ul>
+
+                    <h5 class="mt-4">Tabelas</h5>
+                    <ul>
+                        <li>Todas as tabelas devem ser nomeadas no <strong>singular</strong>.</li>
+                        <li>
+                            Todas as tabelas devem ter as colunas <code>idSessao</code>, <code>UsuarioInclusao</code>,
+                            <code>DataInclusao</code>, <code>IdBotaoOperacao</code> nas primeiras posições.
+                        </li>
+                        <li><code>UsuarioInclusao</code> deve ter valor padrão <code>SUSER_SNAME()</code>.</li>
+                        <li><code>DataInclusao</code> deve ter valor padrão <code>GETDATE()</code>.</li>
+                    </ul>
+
+                    <h5 class="mt-4">Tratamento de Erros</h5>
+
+                    <p class="mb-1 text-muted">Erros com severidade maior ou igual a 16:</p>
+                    <pre class="bg-black p-3 rounded"><code>RAISERROR('Operação Inválida! Existe um tipo vistoria com mesmo nome', 16, 1);</code></pre>
+
+                    <p class="mb-1 text-muted">Erros com severidade menor que 16:</p>
+                    <pre class="bg-black p-3 rounded"><code>@Html.Raw("EXEC @Erro = [Publico].[Raiserror] @NomeInput = 'TipoVistoria.Finalidade', @Mensagem = 'Informe uma finalidade válida';")</code></pre>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== JavaScript ===================== -->
+        <div class="accordion-item bg-dark text-light border-secondary">
+            <h2 class="accordion-header">
+                <button class="accordion-button bg-dark text-light collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#collapseJs">
+                    JavaScript
+                </button>
+            </h2>
+            <div id="collapseJs" class="accordion-collapse collapse" data-bs-parent="#accordionPadroes">
+                <div class="accordion-body">
+
+                    <h5>Comentários</h5>
+                    <p>Acima da função, adicionar descrição, parâmetros e retorno da função.</p>
+
+                    <pre class="bg-black p-3 rounded"><code>
+                    @Html.Raw(@"/**
+                     * Obtém a referência jQuery de uma coluna específica dentro do iframe da Mesa de Trabalho.
+                     * @param {string} idColuna - ID da coluna a ser localizado.
+                     * @returns {jQuery|undefined} Objeto jQuery representando a coluna encontrada.
+                     */");
+                    function getColunaMesaTrabalho(idColuna) {
+                        let $mesaTrabalho = getMesaTrabalho();
+                        const iframe = $mesaTrabalho.find("iframe")[0];
+                        if (!iframe) return;
+                        let $coluna = $(iframe.contentDocument).find(`${idColuna}`);
+                        return $coluna;
+                    }</code></pre>
+
+                    <p>Também pode-se utilizar as seguintes diretrizes:</p>
+                    <pre class="bg-black p-3 rounded"><code>// TODO: [Descrição] - Para tarefas futuras pendentes.
+// FIXME: [Descrição] - Para alertas de refatoração ou correções conhecidas de bugs temporários.</code></pre>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

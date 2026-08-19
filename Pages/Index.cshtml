@@ -1,0 +1,12 @@
+﻿@page
+@* 
+@if (string.IsNullOrWhiteSpace(HttpContext.Session.GetString("IdSessao")))
+{ *@
+@{
+    Response.Redirect("/ControleAcesso/");
+}
+@* }
+else
+{
+    Response.Redirect("/AreaRestrita/");
+} *@
